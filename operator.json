@@ -1,0 +1,14 @@
+[
+  {
+    "id": "operator",
+    "name": "オペレーター",
+    "atk": 1000,
+    "multiplier": 1.5
+  },
+  {
+    "id": "exusiai",
+    "name": "エクシア",
+    "atk": 713,
+    "multiplier": 1.1
+  }
+]
