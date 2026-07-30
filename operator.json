@@ -1,14 +1,26 @@
 [
   {
-    "id": "operator",
-    "name": "オペレーター",
+    "id": "operator1",
+    "name": "オペレーター1",
     "atk": 1000,
     "multiplier": 1.5
   },
   {
-    "id": "exusiai",
-    "name": "エクシア",
-    "atk": 713,
+    "id": "operator2",
+    "name": "オペレーター2",
+    "atk": 1000,
+    "multiplier": 2
+  },
+  {
+    "id": "operator3",
+    "name": "オペレーター3",
+    "atk": 3000,
     "multiplier": 1.1
+  },
+  {
+    "id": "operator4",
+    "name": "オペレーター4",
+    "atk": 500,
+    "multiplier": 0.5
   }
 ]
