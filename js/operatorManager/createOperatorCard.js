@@ -1,0 +1,215 @@
+import {
+    updateOperator,
+    updatePotential,
+    updateModule,
+    updateModuleLevel,
+    updateConditions
+} from "./updateOperatorCard.js";
+import { syncHornDefenderBuff } from "../globalBuff/updateGlobalBuff.js";
+
+export function createOperatorCard(operatorData) {
+
+    const card = document.createElement("div");
+
+    card.className = "operator-card";
+
+    card.innerHTML = `
+        <button class="remove-btn">×</button>
+
+        <select class="operator-select">
+
+            <option value="">
+                オペレーターを選択
+            </option>
+
+            ${operatorData.map(op => `
+                <option value="${op.id}">
+                    ${op.name}
+                </option>
+            `).join("")}
+
+        </select>
+
+        <select class="potential"></select>
+
+        <div class="skill-name"></div>
+
+        <div class="module-area">
+
+        <label>モジュール</label>
+        <select class="module"></select>
+
+        </div>
+
+        <div class="module-level-area">
+
+            <label>レベル</label>
+
+            <select class="module-level"></select>
+
+        </div>
+
+        <div class="talents"></div>
+
+        <div class="conditions"></div>
+    `;
+
+    const operatorSelect = card.querySelector(".operator-select");
+
+    const conditionArea = card.querySelector(".conditions");
+
+    const skillName = card.querySelector(".skill-name");
+
+    const potentialSelect = card.querySelector(".potential");
+
+    const moduleArea = card.querySelector(".module-area");
+    const moduleSelect = card.querySelector(".module");
+    moduleArea.style.display = "none";
+
+    const moduleLevelArea = card.querySelector(".module-level-area");
+    const moduleLevelSelect = card.querySelector(".module-level");
+    moduleLevelArea.style.display = "none";
+
+    bindCardEvents(
+        operatorData,
+        card,
+        operatorSelect,
+        potentialSelect,
+        skillName,
+        moduleArea,
+        moduleSelect,
+        moduleLevelArea,
+        moduleLevelSelect,
+        conditionArea
+    );
+
+    return card;
+}
+
+export function addOperatorCard(operatorData) {
+
+    const list = document.getElementById("operator-list");
+
+    list.appendChild(
+        createOperatorCard(operatorData)
+    );
+
+    updateOperator(operatorData);
+}
+
+function bindCardEvents(
+    operatorData,
+    card,
+    operatorSelect,
+    potentialSelect,
+    skillName,
+    moduleArea,
+    moduleSelect,
+    moduleLevelArea,
+    moduleLevelSelect,
+    conditionArea
+) {
+
+    function getCurrentOperator() {
+
+        return operatorData.find(
+            op => op.id === operatorSelect.value
+        );
+    }
+
+    function refreshConditions() {
+
+        updateConditions(
+            getCurrentOperator(),
+            moduleSelect.value,
+            Number(moduleLevelSelect.value || 0),
+            conditionArea
+        );
+    }
+
+    function syncHornBuff() {
+
+        const operator =
+            getCurrentOperator();
+
+        if (
+            !operator ||
+            operator.id !== "horn"
+        ) {
+            return;
+        }
+
+        syncHornDefenderBuff(
+            Number(potentialSelect.value),
+            moduleSelect.value,
+            Number(moduleLevelSelect.value || 0)
+        );
+    }
+
+
+    operatorSelect.addEventListener("change", () => {
+
+        const operator = getCurrentOperator();
+
+        skillName.textContent =
+            operator
+                ? `スキル：${operator.skill.name}`
+                : "";
+
+        updatePotential(
+            operator,
+            potentialSelect
+        );
+
+        updateModule(
+            operator,
+            moduleArea,
+            moduleSelect,
+            moduleLevelArea,
+            moduleLevelSelect
+        );
+
+        refreshConditions();
+
+        updateOperator(operatorData);
+
+        syncHornBuff();
+    });
+
+    potentialSelect.addEventListener("change", () => {
+
+        syncHornBuff();
+
+    });
+
+    moduleSelect.addEventListener("change", () => {
+
+        const operator = getCurrentOperator();
+
+        updateModuleLevel(
+            operator,
+            moduleSelect.value,
+            moduleLevelArea,
+            moduleLevelSelect
+        );
+
+        refreshConditions();
+
+        syncHornBuff();
+    });
+
+    moduleLevelSelect.addEventListener("change", () => {
+
+        refreshConditions();
+
+        syncHornBuff();
+    });
+
+    card
+        .querySelector(".remove-btn")
+        .addEventListener("click", () => {
+
+            card.remove();
+
+        });
+}

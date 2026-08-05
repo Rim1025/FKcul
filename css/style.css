@@ -1,0 +1,96 @@
+/* Chrome, Edge, Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+body {
+    background: #202020;
+    color: white;
+    font-family: sans-serif;
+}
+
+
+header {
+    text-align: center;
+}
+
+
+.operators {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+
+.operator-card,
+.enemy,
+.result {
+
+    background: #333;
+    border-radius: 10px;
+    padding: 20px;
+
+}
+
+
+.operator-card {
+
+    width: 250px;
+
+}
+
+
+h2 {
+    margin-top: 0;
+}
+
+
+label {
+
+    display: block;
+    margin: 15px 0;
+
+}
+
+
+select,
+input {
+
+    width: 100%;
+    padding: 5px;
+
+}
+
+
+.damage {
+
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+
+.enemy,
+.result {
+
+    width: 550px;
+    margin: 20px auto;
+
+}
+
+
+#totalDamage {
+
+    font-size: 30px;
+    color: #00ff99;
+
+}
