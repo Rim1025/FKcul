@@ -29,7 +29,7 @@ function calculateOperatorDamage(
 
     operator.skill.hits.forEach(hit => {
 
-        for (let i = 0; i < hit.count; i++) {
+        for (let i = 0; i < selected.hitCount; i++) {
 
             const hitDamage = atk * hit.multiplier / 100;
 

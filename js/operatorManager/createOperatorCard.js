@@ -34,6 +34,11 @@ export function createOperatorCard(operatorData) {
 
         <div class="skill-name"></div>
 
+        <div class="hit-count-area">
+            <label>攻撃回数</label>
+            <select class="hit-count"></select>
+        </div>
+
         <div class="module-area">
 
         <label>モジュール</label>
@@ -60,6 +65,12 @@ export function createOperatorCard(operatorData) {
 
     const skillName = card.querySelector(".skill-name");
 
+    const hitCountArea = card.querySelector(".hit-count-area");
+
+    const hitCountSelect = card.querySelector(".hit-count");
+
+    hitCountArea.style.display = "none";
+
     const potentialSelect = card.querySelector(".potential");
 
     const moduleArea = card.querySelector(".module-area");
@@ -76,6 +87,8 @@ export function createOperatorCard(operatorData) {
         operatorSelect,
         potentialSelect,
         skillName,
+        hitCountArea,
+        hitCountSelect,
         moduleArea,
         moduleSelect,
         moduleLevelArea,
@@ -103,6 +116,8 @@ function bindCardEvents(
     operatorSelect,
     potentialSelect,
     skillName,
+    hitCountArea,
+    hitCountSelect,
     moduleArea,
     moduleSelect,
     moduleLevelArea,
@@ -115,6 +130,37 @@ function bindCardEvents(
         return operatorData.find(
             op => op.id === operatorSelect.value
         );
+    }
+
+    function updateHitCount(operator) {
+
+        hitCountArea.style.display = "none";
+        hitCountSelect.innerHTML = "";
+
+        if (!operator?.skill.hitCount) {
+            return;
+        }
+
+        const hitCount =
+            operator.skill.hitCount;
+
+        for (
+            let i = hitCount.min;
+            i <= hitCount.max;
+            i++
+        ) {
+
+            hitCountSelect.innerHTML += `
+            <option value="${i}">
+                ${i}回
+            </option>
+        `;
+        }
+
+        hitCountSelect.value =
+            String(hitCount.default);
+
+        hitCountArea.style.display = "";
     }
 
     function refreshConditions() {
@@ -146,7 +192,6 @@ function bindCardEvents(
         );
     }
 
-
     operatorSelect.addEventListener("change", () => {
 
         const operator = getCurrentOperator();
@@ -160,6 +205,8 @@ function bindCardEvents(
             operator,
             potentialSelect
         );
+
+        updateHitCount(operator);
 
         updateModule(
             operator,

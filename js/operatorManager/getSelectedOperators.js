@@ -27,11 +27,16 @@ export function getSelectedOperators() {
                     card.querySelector(".module-level").value || 0
                 ),
 
+                hitCount: Number(
+                    card.querySelector(".hit-count")?.value || 1
+                ),
+
                 conditions: [
                     ...card.querySelectorAll(".condition:checked")
                 ].map(
                     checkbox => checkbox.value
-                ),
+                )
+
             });
         });
     return selectedOperators;

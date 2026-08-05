@@ -176,7 +176,7 @@ const operators = [
         }
       }
     },
-  },  
+  },
   // ホルン
   {
     "name": "ホルン",
@@ -189,15 +189,18 @@ const operators = [
     ],
     "skill": {
       "name": "S2 テンペストオーダー",
+      "hitCount": {
+        "min": 1,
+        "max": 5,
+        "default": 5
+      },
       "hits": [
         {
           "damage_type": "physical",
-          "count": 5,
           "multiplier": 240
         },
         {
           "damage_type": "arts",
-          "count": 5,
           "multiplier": 60
         },
       ],
@@ -278,7 +281,7 @@ const operators = [
       }
     },
   },
-  
+
   // 実験
   {
     "name": "実験用オペ",
