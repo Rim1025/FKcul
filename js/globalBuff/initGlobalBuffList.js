@@ -33,21 +33,23 @@ export function initGlobalBuffList() {
             )
             .sort((a, b) => a - b);
 
-        const potentialHTML = `
-            <select class="global-buff-potential">
-                ${potentialLevels.map((level, index) => `
-                    <option
-                        value="${level}"
-                        ${index === potentialLevels.length - 1
-                            ? "selected"
-                            : ""
-                        }
-                    >
-                        潜在${level}
-                    </option>
-                `).join("")}
-            </select>
-        `;
+        const potentialHTML = potentialLevels.length > 1
+            ? `
+                <select class="global-buff-potential">
+                    ${potentialLevels.map((level, index) => `
+                        <option
+                            value="${level}"
+                            ${index === potentialLevels.length - 1
+                                ? "selected"
+                                : ""
+                            }
+                        >
+                            潜在${level}
+                        </option>
+                    `).join("")}
+                </select>
+            `
+            : "";
 
 
         // モジュール
@@ -174,14 +176,16 @@ export function initGlobalBuffList() {
 
 
         // 潜在変更
-        potentialSelect.addEventListener(
-            "change",
-            () => {
+        if (potentialSelect) {
+            potentialSelect.addEventListener(
+                "change",
+                () => {
 
-                syncOperatorCard();
+                    syncOperatorCard();
 
-            }
-        );
+                }
+            );
+        }
 
 
         // モジュールありの場合

@@ -1,6 +1,9 @@
 import {
     getOperatorSpecialOptions
 } from "./operatorSpecial/index.js";
+import {
+    getSelectedSingleBuffs
+} from "../singleBuff/singleBuffUI.js";
 
 export function getSelectedOperators() {
 
@@ -46,9 +49,7 @@ export function getSelectedOperators() {
                 specialOptions:
                     getOperatorSpecialOptions(operator, card),
 
-                singleBuffs: [
-                    ...card.querySelectorAll(".single-buff:checked")
-                ].map(checkbox => checkbox.value)
+                singleBuffs: getSelectedSingleBuffs(card)
 
             });
         });

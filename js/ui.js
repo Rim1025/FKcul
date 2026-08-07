@@ -2,6 +2,8 @@
 
 import { addOperatorCard, } from "./operatorManager/createOperatorCard.js";
 import { initGlobalBuffList } from "./globalBuff/initGlobalBuffList.js"
+import { initInspirationBuffList } from "./inspirationBuff/initInspirationBuffList.js";
+import { initEnemyDebuffList } from "./debuff/enemyDebuffUI.js";
 
 export function getEnemyData() {
 
@@ -29,6 +31,8 @@ export function initUI(operatorData) {
         );
 
     initGlobalBuffList();
+    initInspirationBuffList();
+    initEnemyDebuffList();
 
     addOperatorCard(operatorData);
 }

@@ -11,7 +11,7 @@ import {
 } from "./calcSingleBuffs.js";
 
 
-export function calculateAttack(
+export function calculateAttackDetails(
     operator,
     potential,
     moduleName,
@@ -20,11 +20,13 @@ export function calculateAttack(
     selectedOperators,
     selectedGlobalBuffs,
     specialOptions = {},
-    selectedSingleBuffs = []
+    selectedSingleBuffs = [],
+    inspirationAtk = 0,
+    additionalAtkAdd = 0
 ) {
     // コピー
     let baseAtk = operator.atk;
-    const talents = structuredClone(operator.talents);
+    const talents = structuredClone(operator.talents ?? []);
 
     let atkAdd = 0;
     let atkMul = 1;
@@ -124,7 +126,7 @@ export function calculateAttack(
 
     // 潜在
 
-    operator.potential.forEach(p => {
+    (operator.potential ?? []).forEach(p => {
 
         if (p.id <= potential) {
 
@@ -138,7 +140,7 @@ export function calculateAttack(
 
     if (moduleName !== "none") {
 
-        const module = operator.modules[moduleName];
+        const module = operator.modules?.[moduleName];
 
         if (module) {
 
@@ -183,19 +185,39 @@ export function calculateAttack(
         ?? operator.skill.atk_add
         ?? 0;
 
+    atkAdd += specialEffects.atkAdd ?? 0;
+
+    atkMul *= specialEffects.atkMul ?? 1;
+
     atkAdd += calculateGlobalBuffs(
         operator,
         selectedGlobalBuffs
     );
 
     atkAdd += calculateSingleBuffs(
-        selectedSingleBuffs
+        selectedSingleBuffs,
+        operator
     );
 
-    return (
+    atkAdd += additionalAtkAdd;
+
+    const finalAtk = (
         baseAtk
         * (1 + atkAdd / 100)
         * atkMul
+        + inspirationAtk
     );
 
+    return {
+        flatAtk: baseAtk,
+        atkAdd,
+        atkMul,
+        inspirationAtk,
+        finalAtk
+    };
+
+}
+
+export function calculateAttack(...args) {
+    return calculateAttackDetails(...args).finalAtk;
 }

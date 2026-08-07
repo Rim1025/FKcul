@@ -1,20 +1,31 @@
 import {
     calculateBlazeEffects,
-    getBlazeConditions
+    getBlazeIgnoreDef,
+    getBlazeOptions,
+    updateBlazeOptions
 } from "./blaze.js";
 import {
     calculateUlpianusEffects,
     getUlpianusOptions,
     updateUlpianusOptions
 } from "./ulpianus.js";
+import {
+    calculateLemuenEffects,
+    getLemuenHitMultiplier,
+    getLemuenOptions,
+    updateLemuenOptions
+} from "./lemuen.js";
+import {
+    calculateFirewatchEffects,
+    getFirewatchOptions,
+    updateFirewatchOptions
+} from "./firewatch.js";
 
 const specialCalculators = {
     blaze: calculateBlazeEffects,
+    firewatch: calculateFirewatchEffects,
+    lemuen: calculateLemuenEffects,
     ulpianus: calculateUlpianusEffects
-};
-
-const specialConditionGetters = {
-    blaze: getBlazeConditions
 };
 
 export function calculateOperatorSpecialEffects(
@@ -28,19 +39,52 @@ export function calculateOperatorSpecialEffects(
         : {};
 }
 
-export function getOperatorSpecialConditions(operator) {
-    const getConditions = specialConditionGetters[operator.id];
+const specialIgnoreDefCalculators = {
+    blaze: getBlazeIgnoreDef
+};
 
-    return getConditions
-        ? getConditions()
-        : [];
+export function calculateOperatorSpecialIgnoreDef(
+    operator,
+    context
+) {
+    const calculator = specialIgnoreDefCalculators[operator.id];
+
+    return calculator
+        ? calculator(context)
+        : 0;
+}
+
+const specialHitMultiplierCalculators = {
+    lemuen: getLemuenHitMultiplier
+};
+
+export function calculateOperatorHitMultiplier(
+    operator,
+    hit,
+    context
+) {
+    const calculator = specialHitMultiplierCalculators[operator.id];
+
+    return calculator
+        ? calculator(hit, context)
+        : hit.multiplier;
+}
+
+export function getOperatorSpecialConditions(operator) {
+    return [];
 }
 
 const specialOptionRenderers = {
+    blaze: updateBlazeOptions,
+    firewatch: updateFirewatchOptions,
+    lemuen: updateLemuenOptions,
     ulpianus: updateUlpianusOptions
 };
 
 const specialOptionGetters = {
+    blaze: getBlazeOptions,
+    firewatch: getFirewatchOptions,
+    lemuen: getLemuenOptions,
     ulpianus: getUlpianusOptions
 };
 

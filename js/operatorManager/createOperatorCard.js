@@ -10,10 +10,14 @@ import {
     updateOperatorSpecialOptions
 } from "./operatorSpecial/index.js";
 import singleBuffs from "../../data/singleBuffs.js";
+import inspirationBuffs from "../../data/inspirationBuffs.js";
 import {
     bindSingleBuffItems,
     createSingleBuffItem
 } from "../singleBuff/singleBuffUI.js";
+import {
+    canApplySingleBuff
+} from "../singleBuff/singleBuffRules.js";
 
 export function createOperatorCard(operatorData) {
 
@@ -38,9 +42,14 @@ export function createOperatorCard(operatorData) {
 
         </select>
 
-        <select class="potential"></select>
-
         <div class="skill-name"></div>
+
+        <details class="operator-card-details" open>
+        <summary>設定・計算結果</summary>
+
+        <div class="operator-card-content">
+        <select class="potential" hidden></select>
+
 
         <div class="hit-count-area">
             <label>攻撃回数</label>
@@ -69,6 +78,10 @@ export function createOperatorCard(operatorData) {
         <div class="conditions"></div>
 
         <div class="single-buff-area"></div>
+
+        <div class="operator-calculation-details"></div>
+        </div>
+        </details>
     `;
 
     const operatorSelect = card.querySelector(".operator-select");
@@ -205,17 +218,28 @@ function bindCardEvents(
 
     function refreshSingleBuffs() {
         const operator = getCurrentOperator();
+        const inspirationBuffOptions = inspirationBuffs.map(source => ({
+            id: source.buffId,
+            name: `${source.name} ${source.skill.name}（鼓舞）`
+        }));
+        const availableBuffs = [
+            ...singleBuffs.filter(
+                buff => canApplySingleBuff(buff, operator)
+            ),
+            ...inspirationBuffOptions
+        ];
 
         singleBuffArea.innerHTML = "";
 
         if (!operator) return;
 
         singleBuffArea.innerHTML = `
-            <div>個別バフ</div>
-            ${singleBuffs.map(createSingleBuffItem).join("")}
+            <div>バフ</div>
+            ${availableBuffs.map(createSingleBuffItem).join("")}
         `;
 
-        bindSingleBuffItems(singleBuffArea, singleBuffs);
+        bindSingleBuffItems(singleBuffArea);
+
     }
 
     function syncHornBuff() {
@@ -240,6 +264,8 @@ function bindCardEvents(
     operatorSelect.addEventListener("change", () => {
 
         const operator = getCurrentOperator();
+
+        potentialSelect.hidden = !operator;
 
         skillName.textContent =
             operator
@@ -289,6 +315,7 @@ function bindCardEvents(
         );
 
         refreshConditions();
+        refreshSpecialOptions();
 
         syncHornBuff();
     });
@@ -296,6 +323,7 @@ function bindCardEvents(
     moduleLevelSelect.addEventListener("change", () => {
 
         refreshConditions();
+        refreshSpecialOptions();
 
         syncHornBuff();
     });
