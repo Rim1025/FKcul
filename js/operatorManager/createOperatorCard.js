@@ -10,6 +10,10 @@ import {
     updateOperatorSpecialOptions
 } from "./operatorSpecial/index.js";
 import singleBuffs from "../../data/singleBuffs.js";
+import {
+    bindSingleBuffItems,
+    createSingleBuffItem
+} from "../singleBuff/singleBuffUI.js";
 
 export function createOperatorCard(operatorData) {
 
@@ -208,17 +212,10 @@ function bindCardEvents(
 
         singleBuffArea.innerHTML = `
             <div>個別バフ</div>
-            ${singleBuffs.map(buff => `
-                <label>
-                    <input
-                        type="checkbox"
-                        class="single-buff"
-                        value="${buff.id}"
-                    >
-                    ${buff.name}
-                </label>
-            `).join("")}
+            ${singleBuffs.map(createSingleBuffItem).join("")}
         `;
+
+        bindSingleBuffItems(singleBuffArea, singleBuffs);
     }
 
     function syncHornBuff() {

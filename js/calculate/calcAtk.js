@@ -192,10 +192,6 @@ export function calculateAttack(
         selectedSingleBuffs
     );
 
-    // 最終攻撃力
-    console.log("基礎攻撃力：", baseAtk, ", 加算倍率：", atkAdd, ", 乗算倍率：", atkMul)
-    console.log("最終威力：", baseAtk * (1 + atkAdd / 100) * atkMul)
-
     return (
         baseAtk
         * (1 + atkAdd / 100)

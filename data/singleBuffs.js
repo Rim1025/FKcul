@@ -12,5 +12,12 @@ export default [
                 value: 90
             }
         ]
+    },
+    {
+        id: "skalter_inspiration",
+        name: "濁心スカジ S2（鼓舞）",
+        source: "skalter",
+        special: "skalter",
+        effects: []
     }
 ];
