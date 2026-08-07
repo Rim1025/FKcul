@@ -15,7 +15,9 @@ function calculateOperatorDamage(
         selected.moduleLevel,
         selected.conditions,
         selectedOperators,
-        selectedGlobalBuffs
+        selectedGlobalBuffs,
+        selected.specialOptions,
+        selected.singleBuffs
     );
 
     const ignoreDef = getIgnoreDef(

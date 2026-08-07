@@ -14,10 +14,7 @@
           "multiplier": 100
         },
       ],
-      "atk_add":
-      {
-        "value": 0,
-      },
+      "atk_add": 0,
     },
     "talents": [],
     "potential": [],
@@ -53,20 +50,10 @@ const operators = [
       "hits": [
         {
           "damage_type": "physical",
-          "count": 1,
           "multiplier": 400
         },
       ],
-      "atk_add":
-      {
-        "value": 80,
-        "override": [
-          {
-            "value": 71.2,
-            "condition": "自動指揮"
-          }
-        ]
-      },
+      "atk_add": 80,
     },
     "talents": [
       {
@@ -83,6 +70,7 @@ const operators = [
     "potential": [
       {
         "id": 4,
+        "note": "攻撃力+28",
         "effects": [
           {
             "type": "atk_flat",
@@ -204,19 +192,18 @@ const operators = [
           "multiplier": 60
         },
       ],
-      "atk_add":
-      {
-        "value": 0,
-      },
+      "atk_add": 0,
     },
     "talents": [],
     "potential": [
       {
         "id": 3,
+        "note": "素質強化（重装の攻撃力上昇量+3%）",
         "effects": []
       },
       {
         "id": 4,
+        "note": "攻撃力+30",
         "effects": [
           {
             "type": "atk_flat",
@@ -281,12 +268,84 @@ const operators = [
       }
     },
   },
+  // ウルピアヌス
+  {
+    "name": "ウルピアヌス",
+    "id": "ulpianus",
+    "atk": 1649,
+    "tags": [
+      "melee",
+      "guard",
+    ],
+    "skill": {
+      "name": "S3 拓くべき活路",
+      "hits": [
+        {
+          "damage_type": "physical",
+          "multiplier": 160
+        },
+      ],
+      "atk_add": 260,
+    },
+    "talents": [
+      {
+        "id": "tal1",
+        "name": "素質名",
+        "effects": []
+      }
+    ],
+    "potential": [
+      {
+        "id": 4,
+        "note": "攻撃力+45",
+        "effects": [
+          {
+            "type": "atk_flat",
+            "value": 45,
+          },
+        ]
+      },
+      {
+        "id": 5,
+        "note": "素質強化（最大スタック数9→10）",
+        "effects": []
+      }
+    ],
+    "modules": {
+      "X": {
+        "1": {
+          "effects": [
+            {
+              "type": "atk_flat",
+              "value": 84
+            }
+          ]
+        },
+        "2": {
+          "effects": [
+            {
+              "type": "atk_flat",
+              "value": 107
+            },
+          ]
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "atk_flat",
+              "value": 120
+            },
+          ]
+        }
+      },
+    },
+  },
 
   // 実験
   {
     "name": "実験用オペ",
     "id": "operator",
-    "atk": 1000,
+    "atk": 10,
     "tags": [
       "melee",
       "defender",
@@ -300,10 +359,7 @@ const operators = [
           "multiplier": 200
         },
       ],
-      "atk_add":
-      {
-        "value": 50,
-      },
+      "atk_add": 100,
     },
     "talents": [],
     "potential": [],

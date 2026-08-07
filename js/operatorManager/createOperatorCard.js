@@ -6,6 +6,10 @@ import {
     updateConditions
 } from "./updateOperatorCard.js";
 import { syncHornDefenderBuff } from "../globalBuff/updateGlobalBuff.js";
+import {
+    updateOperatorSpecialOptions
+} from "./operatorSpecial/index.js";
+import singleBuffs from "../../data/singleBuffs.js";
 
 export function createOperatorCard(operatorData) {
 
@@ -56,12 +60,18 @@ export function createOperatorCard(operatorData) {
 
         <div class="talents"></div>
 
+        <div class="special-options"></div>
+
         <div class="conditions"></div>
+
+        <div class="single-buff-area"></div>
     `;
 
     const operatorSelect = card.querySelector(".operator-select");
 
     const conditionArea = card.querySelector(".conditions");
+    const specialOptionsArea = card.querySelector(".special-options");
+    const singleBuffArea = card.querySelector(".single-buff-area");
 
     const skillName = card.querySelector(".skill-name");
 
@@ -93,6 +103,8 @@ export function createOperatorCard(operatorData) {
         moduleSelect,
         moduleLevelArea,
         moduleLevelSelect,
+        specialOptionsArea,
+        singleBuffArea,
         conditionArea
     );
 
@@ -122,6 +134,8 @@ function bindCardEvents(
     moduleSelect,
     moduleLevelArea,
     moduleLevelSelect,
+    specialOptionsArea,
+    singleBuffArea,
     conditionArea
 ) {
 
@@ -173,6 +187,40 @@ function bindCardEvents(
         );
     }
 
+    function refreshSpecialOptions() {
+        updateOperatorSpecialOptions(
+            getCurrentOperator(),
+            specialOptionsArea,
+            {
+                potential: Number(potentialSelect.value || 1),
+                moduleName: moduleSelect.value,
+                moduleLevel: Number(moduleLevelSelect.value || 0)
+            }
+        );
+    }
+
+    function refreshSingleBuffs() {
+        const operator = getCurrentOperator();
+
+        singleBuffArea.innerHTML = "";
+
+        if (!operator) return;
+
+        singleBuffArea.innerHTML = `
+            <div>個別バフ</div>
+            ${singleBuffs.map(buff => `
+                <label>
+                    <input
+                        type="checkbox"
+                        class="single-buff"
+                        value="${buff.id}"
+                    >
+                    ${buff.name}
+                </label>
+            `).join("")}
+        `;
+    }
+
     function syncHornBuff() {
 
         const operator =
@@ -217,6 +265,8 @@ function bindCardEvents(
         );
 
         refreshConditions();
+        refreshSpecialOptions();
+        refreshSingleBuffs();
 
         updateOperator(operatorData);
 
@@ -225,6 +275,7 @@ function bindCardEvents(
 
     potentialSelect.addEventListener("change", () => {
 
+        refreshSpecialOptions();
         syncHornBuff();
 
     });
@@ -257,6 +308,7 @@ function bindCardEvents(
         .addEventListener("click", () => {
 
             card.remove();
+            updateOperator(operatorData);
 
         });
 }

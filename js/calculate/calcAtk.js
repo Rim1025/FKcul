@@ -3,6 +3,12 @@
 import {
     calculateGlobalBuffs
 } from "./calcGlobalBuffs.js";
+import {
+    calculateOperatorSpecialEffects
+} from "../operatorManager/operatorSpecial/index.js";
+import {
+    calculateSingleBuffs
+} from "./calcSingleBuffs.js";
 
 
 export function calculateAttack(
@@ -12,7 +18,9 @@ export function calculateAttack(
     moduleLevel,
     conditions,
     selectedOperators,
-    selectedGlobalBuffs
+    selectedGlobalBuffs,
+    specialOptions = {},
+    selectedSingleBuffs = []
 ) {
     // コピー
     let baseAtk = operator.atk;
@@ -102,23 +110,7 @@ export function calculateAttack(
 
             switch (effect.type) {
                 case "atk_add": {
-
-                    let value = effect.value;
-
-                    // override確認
-                    if (effect.override) {
-
-                        effect.override.forEach(override => {
-
-                            if (conditions.includes(override.condition)) {
-                                value = override.value;
-                            }
-
-                        });
-
-                    }
-
-                    atkAdd += value;
+                    atkAdd += effect.value;
 
                     break;
                 }
@@ -173,35 +165,31 @@ export function calculateAttack(
     });
 
     // スキル攻撃力加算
-    const skillAtkAdd = operator.skill.atk_add;
-
-    if (skillAtkAdd) {
-
-        let value = skillAtkAdd.value;
-
-        if (skillAtkAdd.override) {
-
-            skillAtkAdd.override.forEach(override => {
-
-                if (
-                    conditions.includes(
-                        override.condition
-                    )
-                ) {
-                    value = override.value;
-                }
-
-            });
-
+    const specialEffects = calculateOperatorSpecialEffects(
+        operator,
+        {
+            potential,
+            moduleName,
+            moduleLevel,
+            conditions,
+            selectedOperators,
+            specialOptions
         }
+    );
 
-        atkAdd += value;
+    baseAtk += specialEffects.baseAtkFlat ?? 0;
 
-    }
+    atkAdd += specialEffects.skillAtkAdd
+        ?? operator.skill.atk_add
+        ?? 0;
 
     atkAdd += calculateGlobalBuffs(
         operator,
         selectedGlobalBuffs
+    );
+
+    atkAdd += calculateSingleBuffs(
+        selectedSingleBuffs
     );
 
     // 最終攻撃力

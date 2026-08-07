@@ -17,6 +17,20 @@ body {
     font-family: sans-serif;
 }
 
+.global-buff-details {
+    margin: 20px 0;
+}
+
+.global-buff-details summary {
+    cursor: pointer;
+    font-size: 1.17em;
+    font-weight: bold;
+}
+
+#global-buff-list {
+    margin-top: 12px;
+}
+
 
 header {
     text-align: center;

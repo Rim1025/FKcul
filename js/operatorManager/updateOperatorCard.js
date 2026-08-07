@@ -1,3 +1,7 @@
+import {
+    getOperatorSpecialConditions
+} from "./operatorSpecial/index.js";
+
 export function updateOperator(operatorData) {
 
     // 現在選択されているID
@@ -47,31 +51,26 @@ export function updatePotential(operator, potentialSelect) {
     }
 
 
-    // 潜在最大値
-    let maxPotential = 1;
+    const potentialOptions = [
+        {
+            id: 1,
+            note: "強化なし"
+        },
+        ...operator.potential
+    ];
 
-    operator.potential.forEach(p => {
-
-        if (p.id > maxPotential) {
-            maxPotential = p.id;
-        }
-
-    });
-
-
-    for (let i = 1; i <= maxPotential; i++) {
-
+    potentialOptions.forEach(potential => {
         potentialSelect.innerHTML += `
-            <option value="${i}">
-                潜在${i}
+            <option value="${potential.id}">
+                潜在${potential.id}：${potential.note || "強化あり"}
             </option>
         `;
+    });
 
-    }
-
-
-    // 最大潜在を選択
-    potentialSelect.value = maxPotential;
+    // 計算に関係する最大潜在を選択
+    potentialSelect.value = String(
+        potentialOptions.at(-1).id
+    );
 
 }
 
@@ -168,20 +167,10 @@ export function updateConditions(
 
     const conditions = [];
 
-    // スキル条件
-    const atkAdd = operator.skill.atk_add;
-
-    if (atkAdd?.override) {
-
-        atkAdd.override.forEach(override => {
-
-            conditions.push(
-                override.condition
-            );
-
-        });
-
-    }
+    // キャラ固有条件
+    conditions.push(
+        ...getOperatorSpecialConditions(operator)
+    );
 
     // 素質条件
 

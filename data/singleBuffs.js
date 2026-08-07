@@ -3,17 +3,12 @@
 export default [
     {
         id: "warfarin_buff",
-
+        name: "ワルファリン S2（攻撃力+90%）",
         source: "warfarin",
-
-        target: {
-            type: "operator",
-            value: "xxx"
-        },
 
         effects: [
             {
-                type: "atk_mul",
+                type: "atk_add",
                 value: 90
             }
         ]

@@ -1,3 +1,7 @@
+import {
+    getOperatorSpecialOptions
+} from "./operatorSpecial/index.js";
+
 export function getSelectedOperators() {
 
     const selectedOperators = [];
@@ -11,6 +15,8 @@ export function getSelectedOperators() {
 
             // オペレーター未選択ならスキップ
             if (id === "") return;
+
+            const operator = { id };
 
             selectedOperators.push({
 
@@ -35,7 +41,14 @@ export function getSelectedOperators() {
                     ...card.querySelectorAll(".condition:checked")
                 ].map(
                     checkbox => checkbox.value
-                )
+                ),
+
+                specialOptions:
+                    getOperatorSpecialOptions(operator, card),
+
+                singleBuffs: [
+                    ...card.querySelectorAll(".single-buff:checked")
+                ].map(checkbox => checkbox.value)
 
             });
         });

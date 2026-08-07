@@ -1,68 +1,48 @@
-// calcGlobalBuffs.js
+import globalBuffs from "../../data/globalBuffs.js";
 
 export function calculateGlobalBuffs(
     targetOperator,
     selectedGlobalBuffs
 ) {
-
     let atkAdd = 0;
 
-
-    const defenderBuff =
-        selectedGlobalBuffs.find(
-            buff => buff.id === "defender_buff"
+    selectedGlobalBuffs.forEach(selected => {
+        const buff = globalBuffs.find(
+            buffData => buffData.id === selected.id
         );
 
+        if (!buff) return;
 
-    if (defenderBuff) {
+        if (
+            buff.targetTag &&
+            !targetOperator.tags.includes(buff.targetTag)
+        ) {
+            return;
+        }
 
-        atkAdd += calculateDefenderBuff(
-            targetOperator,
-            defenderBuff
-        );
+        let value = getModuleValue(buff, selected);
 
-    }
+        for (
+            let potential = 2;
+            potential <= selected.potential;
+            potential++
+        ) {
+            value += buff[`potential${potential}`] ?? 0;
+        }
 
+        atkAdd += value;
+    });
 
     return atkAdd;
 }
 
-
-function calculateDefenderBuff(
-    targetOperator,
-    buff
-) {
-
-    // 重装以外は対象外
-    if (
-        !targetOperator.tags.includes("defender")
-    ) {
-        return 0;
+function getModuleValue(buff, selected) {
+    if (selected.module === "none") {
+        return buff.base;
     }
 
+    const moduleValueKey =
+        `modules${selected.module}${selected.moduleLevel}`;
 
-    let value = 20;
-
-
-    // モジュールで置換
-    if (buff.module === "X") {
-
-        if (buff.moduleLevel === 2) {
-            value = 25;
-        }
-
-        if (buff.moduleLevel === 3) {
-            value = 28;
-        }
-
-    }
-
-
-    // 潜在は加算
-    if (buff.potential >= 3) {
-        value += 3;
-    }
-
-
-    return value;
+    return buff[moduleValueKey] ?? buff.base;
 }

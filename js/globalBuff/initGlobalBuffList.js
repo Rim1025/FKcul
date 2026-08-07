@@ -21,15 +21,31 @@ export function initGlobalBuffList() {
         item.dataset.buffId = buff.id;
 
 
-        // 潜在
+        // バフ値または同期先の状態が変わる潜在だけ表示
+        const potentialLevels = [
+            1,
+            ...Object.keys(buff)
+                .filter(key => /^potential\d+$/.test(key))
+                .map(key => Number(key.replace("potential", "")))
+        ]
+            .filter((level, index, levels) =>
+                levels.indexOf(level) === index
+            )
+            .sort((a, b) => a - b);
+
         const potentialHTML = `
             <select class="global-buff-potential">
-                <option value="1">潜在1</option>
-                <option value="2">潜在2</option>
-                <option value="3">潜在3</option>
-                <option value="4">潜在4</option>
-                <option value="5">潜在5</option>
-                <option value="6" selected>潜在6</option>
+                ${potentialLevels.map((level, index) => `
+                    <option
+                        value="${level}"
+                        ${index === potentialLevels.length - 1
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        潜在${level}
+                    </option>
+                `).join("")}
             </select>
         `;
 
