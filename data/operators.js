@@ -461,7 +461,7 @@ const operators = [
       "bullet"
     ],
     "skill": {
-      "name": "S3 拓くべき活路",
+      "name": "S3 飽和射撃",
       "hits": [
         {
           "damage_type": "physical",
@@ -662,7 +662,7 @@ const operators = [
       "sniper",
     ],
     "skill": {
-      "name": "S3 拓くべき活路",
+      "name": "S2 爆撃要請",
       "hitCount": {
         "min": 1,
         "max": 3,
